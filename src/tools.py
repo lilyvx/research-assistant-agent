@@ -29,23 +29,23 @@ def retrieve_documents(query: str) -> str:
     that might be covered in the local document set."""
 
     try:
-        results = vector_store.similarity_search(query, k=3)
+        results = vector_store.similarity_search(query, k=3) #embed query, get top 3 closest chunks
     except Exception as error:
-        return f"Document retrieval failed: {error}"
+        return f"Document retrieval failed: {error}" #caught here so a chroma failure doesnt crash the whole agent
 
     if not results:
         return "No relevant documents found locally."
 
-    seen = set()
+    seen = set() #tracks chunk text already added, avoids duplicate chunks in one call
     formatted = []
     for doc in results:
-        if doc.page_content in seen:
+        if doc.page_content in seen: #skip if we already added this exact chunk
             continue
         seen.add(doc.page_content)
         source = doc.metadata.get("source", "unknown source")
-        page = doc.metadata.get("page", None)
+        page = doc.metadata.get("page", None)  #page number, only pdfs have this
         source_label = f"{source} (page {page})" if page is not None else source
-        formatted.append(f"[Source: {source_label}]\n{doc.page_content}")
+        formatted.append(f"[Source: {source_label}]\n{doc.page_content}") #tag each chunk with where it came from
 
     return "\n\n".join(formatted)
 
@@ -59,7 +59,7 @@ def web_search(query: str) -> str:
     
     try:
         with DDGS() as ddgs:
-            results = list(ddgs.text(query, max_results=3))
+            results = list(ddgs.text(query, max_results=3)) #live duckduckgo search, top 3 results
     except Exception as error:
         return f"Web search failed: {error}"
 

@@ -2,7 +2,7 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 
 llm = ChatOllama(
     model="llama3.2",
-    temperature=0.3, 
+    temperature=0.5, 
 )
 
 #embedding model (chunk and search query) 
