@@ -24,11 +24,10 @@ vector_store = Chroma(
 #tool 1: curated search...seacrch chroma vector store for relevant chunks related to query (covered in local documents)
 @tool
 def retrieve_documents(query: str) -> str:
-
-    """Search the local knowledge store of curated research documents
+    """Search the local knowledge base of curated research documents
     for information relevant to the query. Use this first for topics
-    that might be covered in the local document."""
- 
+    that might be covered in the local document set."""
+
     try:
         results = vector_store.similarity_search(query, k=3)
     except Exception as error:
@@ -37,8 +36,12 @@ def retrieve_documents(query: str) -> str:
     if not results:
         return "No relevant documents found locally."
 
+    seen = set()
     formatted = []
     for doc in results:
+        if doc.page_content in seen:
+            continue
+        seen.add(doc.page_content)
         source = doc.metadata.get("source", "unknown source")
         page = doc.metadata.get("page", None)
         source_label = f"{source} (page {page})" if page is not None else source
