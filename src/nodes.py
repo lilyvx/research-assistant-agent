@@ -55,10 +55,10 @@ def reflect_node(state):
 
     if loops_so_far >= MAX_LOOPS:
         print(f"[Reflect] Reached max loops ({MAX_LOOPS}). Stopping research.")
-        return {"continue_research": False}
+        return {"research_complete": True} #corrected boolean key to match graph.py routing function
 
     print(f"[Reflect] Loops so far: {loops_so_far}. Continuing research.")
-    return {"continue_research": True}
+    return {"research_complete": False}
 
 
 #compile all sources into final answer

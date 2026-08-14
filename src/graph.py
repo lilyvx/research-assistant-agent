@@ -17,7 +17,7 @@ def route_after_reflect(state: AgentState) -> str:
     if state["research_complete"]:
         return "respond"
     else:
-        return "continue_research"
+        return "research_complete"
 
 #graph builder
 graph = StateGraph(AgentState)
@@ -40,7 +40,7 @@ graph.add_conditional_edges(
     "reflect",
     route_after_reflect,
     {
-        "continue_research": "researcher", 
+        "research_complete": "researcher", 
         "respond": "responder",
     }, 
 )
