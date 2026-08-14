@@ -1,8 +1,3 @@
-"""
-llm.py
-connect to local model (chat and embedding)
-"""
-
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 
 llm = ChatOllama(
